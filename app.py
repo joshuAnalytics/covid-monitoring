@@ -4,38 +4,39 @@ from covid_monitoring.csse import Regional
 
 r = Regional()
 
-st.title("holiday watch ")
-
-# user input parameters
-population_dict = {
-    "Spain": 46.94,
-    "United Kingdom": 66.65,
-    "France": 66.99,
-}
-countries = population_dict.keys()
-y_vals = ["Incidence_Rate", "Confirmed", "Case-Fatality_Ratio", "Deaths"]
-country = st.sidebar.selectbox("Select Country", list(population_dict.keys()), 0)
-weeks_to_display = st.sidebar.slider("Number of weeks", 1, r.n_weeks_data, value=5)
-y_val = st.sidebar.radio("Metric", y_vals, 1)
+st.title("virus watch ")
 
 # load and process data
 
 r.get_data()
 df = r.load_csvs()
-df = r.preprocess_data(
-    df, country=country, n=5, region_of_interest="C. Valenciana, Spain", y_val=y_val
+
+
+# user input parameters
+
+y_vals = ["Incidence_Rate", "Confirmed", "Case-Fatality_Ratio", "Deaths"]
+r.country = st.sidebar.selectbox("Select country", r.get_country_list(), 9)
+
+
+r.region_of_interest = st.sidebar.selectbox(
+    "Select region of interest", r.get_region_list(), 4
+)
+r.weeks_to_display = st.sidebar.slider("Number of weeks", 1, r.n_weeks_data, value=5)
+r.y_val = st.sidebar.radio("Metric", y_vals, 1)
+r.top_n_regions = st.sidebar.selectbox(
+    "Num regions to compare", list(range(0, r.get_num_regions())), 5
 )
 
-# cs = CsseTimeSeries()
-# cs.preprocess_csse(population_dict)
+df = r.preprocess_data()
 
 # main page
 st.markdown("### regional case rates")
 st.markdown("  \n  \n  \n  \n")
-st.altair_chart(r.plot_data(df, weeks_to_display=weeks_to_display))
+st.altair_chart(r.plot_data())
+st.write(
+    f"Displaying top {r.top_n_regions} regions compared to {r.region_of_interest} "
+)
 
-# st.altair_chart(
-#     r.plot_data(r.df_filtered, y_val=y_val, weeks_to_display=weeks_to_display)
-# )
 
-st.markdown("### country case rates")
+# st.markdown("### regional daily numbers")
+

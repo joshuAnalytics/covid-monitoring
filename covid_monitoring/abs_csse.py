@@ -13,13 +13,13 @@ class AbsCsse(ABC):
         """
 
     @abstractmethod
-    def preprocess_data(self, df):
+    def preprocess_data(self):
         """
         cleans the csse data into a format for plotting
         """
 
     @abstractmethod
-    def plot_data(self, df, weeks_to_display, y_val):
+    def plot_data(self):
         """
         plot the csse time series data as an altair chart
         """
