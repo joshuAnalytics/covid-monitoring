@@ -1,19 +1,17 @@
 import streamlit as st
-from covid_monitoring.csse_countries import CsseTimeSeries
-from covid_monitoring.csse import Regional
+from covid_monitoring import csse
 
-r = Regional()
+r = csse.Regional()
 
 st.title("virus watch ")
 
 # load and process data
 
 r.get_data()
-df = r.load_csvs()
+r.load_csvs()
 
 
 # user input parameters
-
 y_vals = ["Incidence_Rate", "Confirmed", "Case-Fatality_Ratio", "Deaths"]
 r.country = st.sidebar.selectbox("Select country", r.get_country_list(), 9)
 
@@ -27,7 +25,8 @@ r.top_n_regions = st.sidebar.selectbox(
     "Num regions to compare", list(range(0, r.get_num_regions())), 5
 )
 
-df = r.preprocess_data()
+# preprocess, passing all the user inputs as self.attributes
+r.preprocess_data()
 
 # main page
 st.markdown("### regional case rates")
