@@ -1,6 +1,14 @@
 import streamlit as st
 from covid_monitoring import csse
 
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
+local_css("style.css")
+
 r = csse.Regional()
 
 st.title("virus watch ")
