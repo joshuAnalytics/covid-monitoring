@@ -6,12 +6,19 @@ I need a holiday!
 
 ## setup
 create empty env
-```python
+```bash
 $conda create -n covid-monitoring
 $conda activate covid-monitoring
 ```
 install library & requirements
-```python
+```bash
 $conda install pip
 $pip install -e .
+```
+## heroku webapp
+
+push changes 
+
+```bash
+$git push heroku master
 ```

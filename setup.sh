@@ -1,4 +1,6 @@
 mkdir -p ~/.streamlit/
+mkdir -p ~/_data
+mkdir -p ~/_data/daily/
 
 echo "\
 [general]\n\
