@@ -2,6 +2,8 @@ import streamlit as st
 from covid_monitoring.csse_countries import CsseTimeSeries
 from covid_monitoring.csse import Regional
 
+r = Regional()
+
 st.title("holiday watch ")
 
 # user input parameters
@@ -13,11 +15,12 @@ population_dict = {
 countries = population_dict.keys()
 y_vals = ["Incidence_Rate", "Confirmed", "Case-Fatality_Ratio", "Deaths"]
 country = st.sidebar.selectbox("Select Country", list(population_dict.keys()), 0)
-weeks_to_display = st.sidebar.slider("Number of weeks", 1, 8, value=5)
+weeks_to_display = st.sidebar.slider("Number of weeks", 1, r.n_weeks_data, value=5)
 y_val = st.sidebar.radio("Metric", y_vals, 1)
 
 # load and process data
-r = Regional()
+
+r.get_data()
 df = r.load_csvs()
 df = r.preprocess_data(
     df, country=country, n=5, region_of_interest="C. Valenciana, Spain", y_val=y_val

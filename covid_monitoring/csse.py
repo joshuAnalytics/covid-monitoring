@@ -18,13 +18,13 @@ class Regional(AbsCsse):
     def __init__(self):
         self.data_path = "_data/daily/"
         self.top_n_regions = []
-        # self.df_filtered = pd.DataFrame()
+        self.n_weeks_data = 10
 
     def get_data(self):
         """
         get the daily csse reports and save locally
         """
-        for days_delta in range(1, 140):
+        for days_delta in range(1, self.n_weeks_data * 7):
             date_delta = date.today() - timedelta(days=days_delta)
             date_delta = date_delta.strftime("%m-%d-%Y")
             url = f"https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{date_delta}.csv"
@@ -40,6 +40,8 @@ class Regional(AbsCsse):
         """
         load the csv files and filter using some params
         """
+        # _, filename = os.path.split(url)
+        print(glob.glob(self.data_path + "*.csv"))
         df = pd.concat(
             [pd.read_csv(f) for f in glob.glob(self.data_path + "*.csv")],
             ignore_index=True,
