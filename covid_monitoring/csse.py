@@ -37,9 +37,9 @@ class Regional(AbsCsse):
             url = f"https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/{date_delta}.csv"
             _, filename = os.path.split(url)
             if not os.path.exists(self.data_path + filename):
+                print(filename, "doesn't exist")
                 try:
                     wget.download(url, self.data_path)
-                    st.warning(f"retrieving daily reports")
                 except HTTPError:
                     st.warning(f"could not retrieve data for {date_delta}")
                     pass
@@ -73,7 +73,20 @@ class Regional(AbsCsse):
             except:
                 st.warning(f"missing columns in {filename}")
 
-        self.df_raw = pd.concat(df_list)
+        df = pd.concat(df_list)
+
+        # filter null regions
+        null_regions = []
+        for country in df["Country_Region"].unique():
+            num_regions = len(
+                df[df["Country_Region"] == country]["Province_State"].unique()
+            )
+            if num_regions < 2:
+                null_regions.append(country)
+
+        df = df.loc[~df["Country_Region"].isin(null_regions)].copy()
+
+        self.df_raw = df
         return self.df_raw
 
     def get_num_regions(self):
