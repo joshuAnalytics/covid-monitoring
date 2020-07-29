@@ -159,13 +159,13 @@ class Regional(AbsCsse):
         # The basic line
         line = (
             alt.Chart(plot)
-            .mark_line(interpolate="basis", size=3, opacity=0.6)
+            .mark_line(interpolate="basis", size=2.5, opacity=0.75)
             .encode(
                 x="date:T",
                 y=f"{self.y_val}:Q",
                 color=alt.Color(
                     "Province_State",
-                    scale=alt.Scale(scheme="dark2"),
+                    scale=alt.Scale(scheme="tableau10"),
                     legend=alt.Legend(
                         title=f"regions",
                         orient="right",
@@ -178,7 +178,7 @@ class Regional(AbsCsse):
         # Put the layers into a chart and bind the data
         chart = (
             alt.layer(line)
-            .properties(width=600, height=400)
+            .properties(width=600, height=550)
             .configure(background="#313236")
             .configure_axis(
                 grid=True,
